@@ -18,14 +18,15 @@ function performAction(e) {
   if (zip === "" || zip === null) {
     alert("Please enter a valid zip code");
   }
-  getForecast(zip).then(APItemperature => {
-    postData("/add", {
-      temperature: APItemperature,
-      date: newDate,
-      userFeelings: feelings
-    });
-    renderUI();
-  });
+  getForecast(zip)
+    .then(APItemperature => {
+      postData("/add", {
+        temperature: APItemperature,
+        date: newDate,
+        userFeelings: feelings
+      });
+    })
+    .then(renderUI);
 }
 
 /* Function to GET Web API Data*/
