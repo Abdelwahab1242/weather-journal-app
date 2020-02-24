@@ -1,6 +1,4 @@
 /* Global Variables */
-const feelings = document.getElementById("feelings").value;
-const zip = document.getElementById("zip").value;
 
 // Create a new date instance dynamically with JS
 let d = new Date();
@@ -14,7 +12,9 @@ const openWeatherUrl = "http://api.openweathermap.org/data/2.5/weather?zip=";
 document.getElementById("generate").addEventListener("click", performAction);
 
 /* Function called by event listener */
-const performAction = e => {
+function performAction(e) {
+  const feelings = document.getElementById("feelings").value;
+  const zip = document.getElementById("zip").value;
   if (zip === "" || zip === null) {
     alert("Please enter a valid zip code");
   }
@@ -26,12 +26,13 @@ const performAction = e => {
     });
     renderUI();
   });
-};
+}
 
 /* Function to GET Web API Data*/
 const getForecast = async zipCode => {
-  const urlToFetch = `${openWeatherUrl}${zipCode},us&appid=${openWeatherKey}`;
-  const response = await fetch(urlToFetch);
+  const response = await fetch(
+    `${openWeatherUrl}${zipCode},us&appid=${openWeatherKey}`
+  );
   try {
     if (response.ok) {
       const jsonResponse = await response.json();

@@ -31,13 +31,13 @@ function listening() {
 }
 
 // Initialize all route with a callback function
-app.get("all", (request, response) => {
+app.get("/all", (request, response) => {
   // Callback function to complete GET '/all'
   response.send(projectData);
 });
 
 // Post Route
-app.post("add", (req, res) => {
+app.post("/add", (req, res) => {
   projectData.push(req.body);
   res.send(true);
 });
