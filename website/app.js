@@ -13,17 +13,17 @@ document.getElementById("generate").addEventListener("click", performAction);
 
 /* Function called by event listener */
 function performAction(e) {
-  const feelings = document.getElementById("feelings").value;
+  const input = document.getElementById("feelings").value;
   const zip = document.getElementById("zip").value;
   if (zip === "" || zip === null) {
     alert("Please enter a valid zip code");
   }
   getForecast(zip)
-    .then(APItemperature => {
+    .then(jsonResponse => {
       postData("/add", {
-        temperature: APItemperature,
+        temp: jsonResponse.main.temp,
         date: newDate,
-        userFeelings: feelings
+        input: input
       });
     })
     .then(renderUI);
@@ -37,20 +37,8 @@ const getForecast = async zipCode => {
   try {
     if (response.ok) {
       const jsonResponse = await response.json();
-      APItemperature = jsonResponse.main.temp;
-      return APItemperature;
+      return jsonResponse;
     }
-  } catch (error) {
-    console.log("error", error);
-  }
-};
-
-/* Function to GET Project Data */
-const retrieveData = async (url = "") => {
-  const request = await fetch(url);
-  try {
-    const allData = await request.json();
-    return allData;
   } catch (error) {
     console.log("error", error);
   }
@@ -79,14 +67,16 @@ const postData = async (url = "", data = {}) => {
 const renderUI = async () => {
   const request = await fetch("/all");
   try {
-    const data = await request.json();
-    document.getElementById("date").innerHTML = `Date: ${data.date}`;
-    document.getElementById(
-      "temp"
-    ).innerHTML = `Temperature: ${data.temperature}`;
-    document.getElementById(
-      "content"
-    ).innerHTML = `Content: ${data.userFeelings}`;
+    const serverData = await request.json();
+    document.getElementById("date").innerHTML = `Date: ${
+      serverData[serverData.length - 1].date
+    }`;
+    document.getElementById("temp").innerHTML = `Temperature: ${
+      serverData[serverData.length - 1].temp
+    }`;
+    document.getElementById("content").innerHTML = `Content: ${
+      serverData[serverData.length - 1].input
+    }`;
   } catch (error) {
     console.log("error", error);
   }
